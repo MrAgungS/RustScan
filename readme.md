@@ -12,7 +12,7 @@ RustScan scans a given directory and collects metadata about its contents — fi
 ## Planned Features
 
 - [x] Define core `FileInfo` data structure
-- [ ] Scan a single directory and collect file metadata
+- [x] Scan a single directory and collect file metadata
 - [ ] CLI argument parsing (via `clap`)
 - [ ] Recursive directory scanning (via `walkdir`)
 - [ ] File hashing for duplicate detection (via `sha2`)

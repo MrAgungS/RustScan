@@ -1,3 +1,41 @@
+use clap::Parser;
+use std::path::PathBuf;
+
+mod file_info;
+mod scanner;
+
+#[derive(Parser)]
+struct Args {
+    #[arg(short, long)]
+    path: PathBuf,
+}
+
 fn main() {
-    println!("Hello, world!");
+    // let test = scanner::scan_folder(".");
+    // match test {
+    //     Ok(success) => println!("{:?}", success),
+    //     Err(error) => eprintln!("got error {:?}", error),
+    // }
+
+    let input = Args::parse();
+    let path_str = input
+        .path
+        .to_str()
+        .expect("Path contains invalid UTF-8 characters");
+
+    //     if let Some(path_str) = input.path.to_str() {
+    //         let scanner = scanner::scan_folder(path_str);
+    //
+    //         match scanner {
+    //             Ok(success) => println!("{:?}", success),
+    //             Err(error) => eprintln!("got error {:?}", error),
+    //         }
+    //     } else {
+    //         eprintln!("We have some error")
+    //     }
+
+    match scanner::scan_folder(path_str) {
+        Ok(success) => println!("{:?}", success),
+        Err(error) => eprintln!("got error {:?}", error),
+    }
 }
