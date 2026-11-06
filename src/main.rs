@@ -9,7 +9,7 @@ struct Args {
     #[arg(short, long)]
     path: PathBuf,
 
-    #[arg(short, long)]
+    #[arg(short, long, num_args = 0..)]
     ignored_folder: Vec<String>,
 }
 
