@@ -8,6 +8,9 @@ mod scanner;
 struct Args {
     #[arg(short, long)]
     path: PathBuf,
+
+    #[arg(short, long, num_args = 0..)]
+    ignored_folder: Vec<String>,
 }
 
 fn main() {
@@ -17,7 +20,9 @@ fn main() {
         .to_str()
         .expect("Path contains invalid UTF-8 characters");
 
-    match scanner::scan_folder(path_str) {
+    let ignored_folder_string = &input.ignored_folder;
+
+    match scanner::scan_folder(path_str, ignored_folder_string) {
         Ok(success) => println!("{:#?}", success),
         Err(error) => eprintln!("got error {:#?}", error),
     }
