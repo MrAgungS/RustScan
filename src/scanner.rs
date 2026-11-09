@@ -1,28 +1,25 @@
-use crate::file_info::FileInfo;
-use std::{fs, io::Error, path::PathBuf};
+use walkdir::WalkDir;
 
-pub fn scan_folder(path: &str, exclude_list: &Vec<String>) -> Result<Vec<FileInfo>, Error> {
-    let entries = fs::read_dir(path)?;
+use crate::file_info::FileInfo;
+use std::{io::Error, path::Path};
+
+pub fn scan_folder(path: &Path, exclude_list: &[String]) -> Result<Vec<FileInfo>, Error> {
+    let entries = WalkDir::new(path)
+        .min_depth(1)
+        .into_iter()
+        .filter_entry(|entry_path| !should_skip(entry_path.path(), exclude_list));
     let mut results: Vec<FileInfo> = Vec::new();
 
     for entry in entries {
         let dir = entry?;
-        let entry_path = &dir.path();
 
-        if should_skip(entry_path, exclude_list) {
-            continue;
-        }
-
+        let entry_path = dir.path();
         let metadata = dir.metadata()?;
 
-        let size = metadata.len();
-        let modified = metadata.modified()?;
-        let name = entry_path.clone();
-
         let file_info = FileInfo {
-            name,
-            modified,
-            size,
+            name: entry_path.to_path_buf(),
+            modified: metadata.modified()?,
+            size: metadata.len(),
         };
 
         results.push(file_info);
@@ -30,11 +27,10 @@ pub fn scan_folder(path: &str, exclude_list: &Vec<String>) -> Result<Vec<FileInf
     Ok(results)
 }
 
-fn should_skip(entry_path: &PathBuf, exclude_list: &Vec<String>) -> bool {
-    let entry = entry_path.file_name();
-    let Some(entry_string) = entry.and_then(|e| e.to_str()).map(|s| s.to_string()) else {
+fn should_skip(entry_path: &Path, exclude_list: &[String]) -> bool {
+    let Some(entry) = entry_path.file_name().and_then(|e| e.to_str()) else {
         return false;
     };
 
-    exclude_list.contains(&entry_string)
+    exclude_list.iter().any(|excluded| excluded == entry)
 }
