@@ -15,14 +15,8 @@ struct Args {
 
 fn main() {
     let input = Args::parse();
-    let path_str = input
-        .path
-        .to_str()
-        .expect("Path contains invalid UTF-8 characters");
 
-    let ignored_folder_string = &input.ignored_folder;
-
-    match scanner::scan_folder(path_str, ignored_folder_string) {
+    match scanner::scan_folder(&input.path, &input.ignored_folder) {
         Ok(success) => println!("{:#?}", success),
         Err(error) => eprintln!("got error {:#?}", error),
     }
