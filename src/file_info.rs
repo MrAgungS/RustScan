@@ -6,3 +6,9 @@ pub struct FileInfo {
     pub modified: SystemTime,
     pub size: u64,
 }
+
+#[derive(Debug)]
+pub struct HashedFile<'a> {
+    pub file_info: &'a FileInfo,
+    pub hash: String,
+}
