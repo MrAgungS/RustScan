@@ -5,6 +5,7 @@ pub struct FileInfo {
     pub name: PathBuf,
     pub modified: SystemTime,
     pub size: u64,
+    pub is_dir: bool,
 }
 
 #[derive(Debug)]
