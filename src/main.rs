@@ -23,11 +23,12 @@ fn main() {
     let input = Args::parse();
 
     match scanner::scan_folder(&input.path, &input.ignored_folder) {
-        // Ok(success) => println!("{:#?}", success),
         Ok(success) => {
             if input.check_duplicates {
-                let duplicate_check = hash_files(&success);
-                println!("{:#?}", duplicate_check)
+                match hash_files(&success) {
+                    Ok(duplicate_check) => println!("{:#?}", duplicate_check),
+                    Err(err) => eprintln!("{:#?}", err)
+                }
             } else {
                 println!("{:#?}", success)
             }
