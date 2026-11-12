@@ -20,6 +20,7 @@ pub fn scan_folder(path: &Path, exclude_list: &[String]) -> Result<Vec<FileInfo>
             name: entry_path.to_path_buf(),
             modified: metadata.modified()?,
             size: metadata.len(),
+            is_dir: metadata.is_dir(),
         };
 
         results.push(file_info);
