@@ -18,7 +18,7 @@ This project was built as a learning exercise to practice core Rust concepts: ow
 Clone the repository and install it locally with Cargo:
 
 ```bash
-git clone https://github.com/<your-username>/rustscan.git
+git clone https://github.com/MrAgungS/rustscan.git
 cd rustscan
 cargo install --path .
 ```
